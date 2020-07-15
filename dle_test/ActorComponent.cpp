@@ -1,10 +1,11 @@
 
 #include "ActorComponent.h"
 
-Enemy::Enemy(int _x, int _y)
+Enemy::Enemy(int _x, int _y, float speedKoef)
 {
-	x = _x;
-	y = _y;
+	x				= _x;
+	y				= _y;
+	speedKoeficient = speedKoef;
 }
 
 void Enemy::move(int playerX, int playerY)
@@ -15,8 +16,8 @@ void Enemy::move(int playerX, int playerY)
 	float oddX = (deltaX) / sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 	float oddY = (deltaY) / sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 
-	x += oddX;
-	y += oddY;
+	x += oddX * speedKoeficient;
+	y += oddY * speedKoeficient;
 }
 
 Bullet::Bullet(int _x, int _y, int directionX, int directionY)
@@ -39,23 +40,23 @@ void Bullet::move()
 	y += dy;
 }
 
-void Bullet::collisionWithEnemy(std::vector<Enemy>& enemy_pool)
+void Bullet::collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition bulletSpriteSize)
 {
 	int i = 0;
 	for (auto enemy : enemy_pool)
 	{
-		if (abs(x - enemy.x) < 23)
+		if (abs(x - enemy.x) < ((enemySpriteSize.x + bulletSpriteSize.x) / 2))
 		{
-			if (abs(y - enemy.y) < 23)
+			if (abs(y - enemy.y) < ((enemySpriteSize.y + bulletSpriteSize.y) / 2))
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
 				penetration = true;
 				return;
 			}
 		}
-		else if (abs(y - enemy.y) < 23)
+		else if (abs(y - enemy.y) < ((enemySpriteSize.y + bulletSpriteSize.y) / 2))
 		{
-			if (abs(x - enemy.x) < 23) 
+			if (abs(x - enemy.x) < ((enemySpriteSize.x + bulletSpriteSize.x) / 2))
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
 				penetration = true;
@@ -120,23 +121,23 @@ void Player::reload()
 	}
 }
 
-void Player::collisionWithEnemy(std::vector<Enemy>& enemy_pool)
+void Player::collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition heroSpriteSize)
 {
 	int i = 0;
 	for (auto enemy : enemy_pool)
 	{
-		if (abs(x - enemy.x) < 38)
+		if (abs(x - enemy.x) < ((enemySpriteSize.x + heroSpriteSize.x) / 2))
 		{
-			if (abs(y - enemy.y) < 38)
+			if (abs(y - enemy.y) < ((enemySpriteSize.y + heroSpriteSize.y) / 2))
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
 				dead = true;
 				return;
 			}
 		}
-		else if (abs(y - enemy.y) < 38)
+		else if (abs(y - enemy.y) < ((enemySpriteSize.y + heroSpriteSize.y) / 2))
 		{
-			if (abs(x - enemy.x) < 38)
+			if (abs(x - enemy.x) < ((enemySpriteSize.x + heroSpriteSize.x) / 2))
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
 				dead = true;

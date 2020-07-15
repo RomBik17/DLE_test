@@ -63,7 +63,25 @@ public:
 		sight_sprite	= createSprite("data\\aim_icon.png");
 		bullet_sprite	= createSprite("data\\bullet.png");
 
-		hero_pos = new Player(backGround.screen_width / 2, backGround.screen_height / 2, 10);
+		hero_pos		= new Player(backGround.screen_width / 2, 
+									backGround.screen_height / 2, 
+									10);
+
+		getSpriteSize	(hero_sprite, 
+						backGround.heroSpriteSize.x, 
+						backGround.heroSpriteSize.y);
+
+		getSpriteSize	(enemy_sprite, 
+						backGround.enemySpriteSize.x, 
+						backGround.enemySpriteSize.y);
+
+		getSpriteSize	(bullet_sprite, 
+						backGround.bulletSpriteSize.x, 
+						backGround.bulletSpriteSize.y);
+
+		getSpriteSize	(sight_sprite,
+						backGround.sightSpriteSize.x,
+						backGround.sightSpriteSize.y);
 
 		return true;
 	}
@@ -76,26 +94,38 @@ public:
 		ATime			= getTickCount();
 
 		drawTestBackground();
-		drawSprite(hero_sprite, hero_pos->x - 32, hero_pos->y - 32);
-		drawSprite(sight_sprite, sight_pos.x - 15, sight_pos.y - 15);
+
+		drawSprite	(hero_sprite, 
+					hero_pos->x - (backGround.heroSpriteSize.x / 2),
+					hero_pos->y - (backGround.heroSpriteSize.y / 2));
+
+		drawSprite	(sight_sprite, 
+					sight_pos.x - (backGround.sightSpriteSize.x / 2),
+					sight_pos.y - (backGround.sightSpriteSize.y / 2));
 		
 		SpawnEnemy();
 
 		for (auto& enemy : enemy_pool)
 		{
-			drawSprite(enemy_sprite, enemy.x - 6, enemy.y - 6);
+			drawSprite	(enemy_sprite, 
+						enemy.x - (backGround.enemySpriteSize.x / 2),
+						enemy.y - (backGround.enemySpriteSize.y / 2));
+
 			enemy.move(hero_pos->x, hero_pos->y);
 		}
 
 		for (auto& bullet : hero_pos->bulletPool)
 		{
-			drawSprite(bullet_sprite, bullet.x, bullet.y);
+			drawSprite(bullet_sprite, 
+						bullet.x - (backGround.bulletSpriteSize.x / 2),
+						bullet.y - (backGround.bulletSpriteSize.y / 2));
+
 			bullet.move();
-			bullet.collisionWithEnemy(enemy_pool);
+			bullet.collisionWithEnemy(enemy_pool, backGround.enemySpriteSize, backGround.bulletSpriteSize);
 		}
 
 		hero_pos->reload();
-		hero_pos->collisionWithEnemy(enemy_pool);
+		hero_pos->collisionWithEnemy(enemy_pool, backGround.enemySpriteSize, backGround.heroSpriteSize);
 
 		if (hero_pos->dead) return true;;
 

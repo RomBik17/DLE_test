@@ -12,49 +12,69 @@ struct ActorPosition
 
 struct BackgroundInfo
 {
-	int screen_width;
-	int screen_height;
-	int map_width;
-	int map_height;
-	int enemy_max;
+	int				screen_width;
+	int				screen_height;
+	int				map_width;
+	int				map_height;
+	int				enemy_max;
+
+	ActorPosition	heroSpriteSize;
+	ActorPosition	bulletSpriteSize;
+	ActorPosition	enemySpriteSize;
+	ActorPosition	sightSpriteSize;
 };
 
 class ActorComponent
 {
 public:
+
 	float x;
 	float y;
 
 	virtual ~ActorComponent() {}
+
 };
 
 class Enemy : public ActorComponent
 {
+private:
+
+	float speedKoeficient;
+
 public:
-	Enemy(int _x, int _y);
+
+	Enemy(int _x, int _y, float speedKoef = 0.5);
 
 	void move(int playerX, int playerY);
+
 };
 
 class Bullet : public ActorComponent
 {
 private:
+
 	float dx;
 	float dy;
+
 public:
+
 	bool penetration;
 
 	Bullet(int _x, int _y, int directionX, int directionY);
 
 	void move();
-	void collisionWithEnemy(std::vector<Enemy>& enemy_pool);
+	void collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition bulletSpriteSize);
+
 };
 
 class Player : public ActorComponent
 {
 private:
+
 	int maxBullets;
+
 public:
+
 	bool dead;
 
 	std::vector<Bullet> bulletPool;
@@ -63,5 +83,6 @@ public:
 	void move(Direction direction);
 	void shoot(int directionX, int directionY);
 	void reload();
-	void collisionWithEnemy(std::vector<Enemy>& enemy_pool);
+	void collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition heroSpriteSize);
+
 };
