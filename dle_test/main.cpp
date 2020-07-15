@@ -32,9 +32,17 @@ private:
 			srand(time(0));
 			int tx;
 			int ty;
+			
+			if ( hero_pos->x > backGround.screen_width / 2) 
+				tx = rand() % backGround.screen_width / 2 - backGround.heroSpriteSize.x *2;
+			else 
+				tx = backGround.screen_width / 2 + rand() % backGround.screen_width / 2 + backGround.heroSpriteSize.x * 2;
 
-			tx = rand() % 600;
-			ty = rand() % 300;
+
+			if (hero_pos->x > backGround.screen_height / 2) 
+				ty = rand() % backGround.screen_height / 2 - backGround.heroSpriteSize.y * 2;
+			else 
+				ty = backGround.screen_height / 2 + rand() % backGround.screen_height / 2 + backGround.heroSpriteSize.y * 2;
 
 
 			Enemy en(tx, ty);
@@ -65,7 +73,7 @@ public:
 
 		hero_pos		= new Player(backGround.screen_width / 2, 
 									backGround.screen_height / 2, 
-									10);
+									2);
 
 		getSpriteSize	(hero_sprite, 
 						backGround.heroSpriteSize.x, 
@@ -116,18 +124,22 @@ public:
 
 		for (auto& bullet : hero_pos->bulletPool)
 		{
-			drawSprite(bullet_sprite, 
+			drawSprite	(bullet_sprite, 
 						bullet.x - (backGround.bulletSpriteSize.x / 2),
 						bullet.y - (backGround.bulletSpriteSize.y / 2));
 
 			bullet.move();
-			bullet.collisionWithEnemy(enemy_pool, backGround.enemySpriteSize, backGround.bulletSpriteSize);
+			bullet.collisionWithEnemy	(enemy_pool, 
+										backGround.enemySpriteSize, 
+										backGround.bulletSpriteSize);
 		}
 
 		hero_pos->reload();
-		hero_pos->collisionWithEnemy(enemy_pool, backGround.enemySpriteSize, backGround.heroSpriteSize);
+		hero_pos->collisionWithEnemy	(enemy_pool, 
+										backGround.enemySpriteSize, 
+										backGround.heroSpriteSize);
 
-		if (hero_pos->dead) return true;;
+		if (hero_pos->dead) return true;
 
 		showCursor(false);
 
@@ -148,6 +160,8 @@ public:
 			{
 			case FRMouseButton::LEFT:
 			{
+				if (hero_pos->bulletPool.size() == hero_pos->maxBullets) 
+					hero_pos->bulletPool.erase(hero_pos->bulletPool.begin());
 				hero_pos->shoot(sight_pos.x, sight_pos.y);
 				break;
 			}
@@ -155,7 +169,6 @@ public:
 				break;
 			}
 		}
-
 	}
 
 	virtual void onKeyPressed(FRKey k) {

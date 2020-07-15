@@ -69,17 +69,17 @@ public:
 
 class Player : public ActorComponent
 {
-private:
-
-	int maxBullets;
 
 public:
 
-	bool dead;
+	int					maxBullets;
+
+	bool				dead;
 
 	std::vector<Bullet> bulletPool;
 
 	Player(int _x, int _y, int bulletCount);
+
 	void move(Direction direction);
 	void shoot(int directionX, int directionY);
 	void reload();
