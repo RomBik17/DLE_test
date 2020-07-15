@@ -94,7 +94,15 @@ public:
 		return true;
 	}
 
-	virtual void Close() {}
+	virtual void Close() 
+	{
+		destroySprite(hero_sprite);
+		destroySprite(bullet_sprite);
+		destroySprite(enemy_sprite);
+		destroySprite(sight_sprite);
+
+		delete hero_pos;
+	}
 
 	virtual bool Tick() 
 	{
