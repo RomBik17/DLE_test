@@ -50,7 +50,7 @@ public:
 		height						= 360;
 		fullscreen					= false;
 
-		backGround.screen_height	= width;
+		backGround.screen_width		= width;
 		backGround.screen_height	= height;
 		backGround.enemy_max		= 3;
 
@@ -63,7 +63,7 @@ public:
 		sight_sprite	= createSprite("data\\aim_icon.png");
 		bullet_sprite	= createSprite("data\\bullet.png");
 
-		hero_pos = new Player(200, 200, 10);
+		hero_pos = new Player(backGround.screen_width / 2, backGround.screen_height / 2, 10);
 
 		return true;
 	}
