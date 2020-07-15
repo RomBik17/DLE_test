@@ -12,14 +12,14 @@ private:
 
 	float							ATime = 0;
 
-	Sprite* hero_sprite;
-	Sprite* enemy_sprite;
-	Sprite* sight_sprite;
-	Sprite* bullet_sprite;
+	Sprite*							hero_sprite;
+	Sprite*							enemy_sprite;
+	Sprite*							sight_sprite;
+	Sprite*							bullet_sprite;
 
 	std::vector<Enemy>				enemy_pool;
 
-	Player* hero_pos;
+	Player*							hero_pos;
 	ActorPosition					sight_pos;
 
 	BackgroundInfo					backGround;
@@ -53,6 +53,7 @@ public:
 		backGround.screen_height	= width;
 		backGround.screen_height	= height;
 		backGround.enemy_max		= 3;
+
 	}
 
 	virtual bool Init() 
@@ -67,9 +68,7 @@ public:
 		return true;
 	}
 
-	virtual void Close() {
-		
-	}
+	virtual void Close() {}
 
 	virtual bool Tick() 
 	{
@@ -96,10 +95,12 @@ public:
 		}
 
 		hero_pos->reload();
+		hero_pos->collisionWithEnemy(enemy_pool);
 
-		hero_pos->ifCollisionwithEnemy(enemy_pool);
+		if (hero_pos->dead) return true;;
 
 		showCursor(false);
+
 		return false;
 	}
 
@@ -159,8 +160,7 @@ public:
 		}
 	}
 
-	virtual void onKeyReleased(FRKey k) {
-	}
+	virtual void onKeyReleased(FRKey k) {}
 };
 
 int main(int argc, char* argv[])

@@ -117,28 +117,30 @@ void Player::reload()
 	}
 }
 
-bool Player::ifCollisionwithEnemy(std::vector<Enemy>& enemy_pool)
+void Player::collisionWithEnemy(std::vector<Enemy>& enemy_pool)
 {
 	int i = 0;
 	for (auto enemy : enemy_pool)
 	{
-		if (abs(x - enemy.x) < 23)
+		if (abs(x - enemy.x) < 38)
 		{
-			if (abs(y - enemy.y) < 23)
+			if (abs(y - enemy.y) < 38)
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
-				return  true;
+				dead = true;
+				return;
 			}
 		}
-		else if (abs(y - enemy.y) < 23)
+		else if (abs(y - enemy.y) < 38)
 		{
-			if (abs(x - enemy.x) < 23)
+			if (abs(x - enemy.x) < 38)
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
-				return  true;
+				dead = true;
+				return;
 			}
 		}
 		i++;
 	}
-	return false;
+	return;
 }

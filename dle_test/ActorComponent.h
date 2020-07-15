@@ -63,5 +63,5 @@ public:
 	void move(Direction direction);
 	void shoot(int directionX, int directionY);
 	void reload();
-	bool ifCollisionwithEnemy(std::vector<Enemy>& enemy_pool);
+	void collisionWithEnemy(std::vector<Enemy>& enemy_pool);
 };
