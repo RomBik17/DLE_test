@@ -10,19 +10,19 @@ class MyFramework : public Framework {
 
 private:
 
-	float							ATime = 0;
+	float					ATime = 0;
 
-	Sprite*							hero_sprite;
-	Sprite*							enemy_sprite;
-	Sprite*							sight_sprite;
-	Sprite*							bullet_sprite;
+	Sprite*					hero_sprite;
+	Sprite*					enemy_sprite;
+	Sprite*					sight_sprite;
+	Sprite*					bullet_sprite;
 
-	std::vector<Enemy>				enemy_pool;
+	std::vector<Enemy>		enemy_pool;
 
-	Player*							hero_pos;
-	ActorPosition					sight_pos;
+	Player*					hero_pos;
+	ActorPosition			sight_pos;
 
-	BackgroundInfo					backGround;
+	BackgroundInfo			backGround;
 
 	void SpawnEnemy()
 	{
