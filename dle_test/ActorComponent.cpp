@@ -9,7 +9,6 @@ Enemy::Enemy(int _x, int _y)
 
 void Enemy::move(int playerX, int playerY)
 {
-	/*
 	float deltaX = playerX - x;
 	float deltaY = playerY - y;
 
@@ -17,14 +16,16 @@ void Enemy::move(int playerX, int playerY)
 	float oddY = (deltaY) / sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 
 	x += oddX;
-	y += oddY;*/
+	y += oddY;
 }
 
 Bullet::Bullet(int _x, int _y, int directionX, int directionY)
 {
 	penetration = false;
+
 	x = _x;
 	y = _y;
+
 	float deltaX = directionX - _x;
 	float deltaY = directionY - _y;
 
@@ -68,8 +69,10 @@ void Bullet::collisionWithEnemy(std::vector<Enemy>& enemy_pool)
 Player::Player(int _x, int _y, int bulletCount)
 {
 	dead = false;
+
 	x = _x;
 	y = _y;
+
 	maxBullets = bulletCount;
 }
 
