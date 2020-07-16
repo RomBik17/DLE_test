@@ -17,6 +17,7 @@ struct BackgroundInfo
 	int				map_width;
 	int				map_height;
 	int				enemy_max;
+	int				max_bullets;
 
 	ActorPosition	heroSpriteSize;
 	ActorPosition	bulletSpriteSize;
