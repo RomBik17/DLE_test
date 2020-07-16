@@ -30,6 +30,7 @@ private:
 	void SpawnEnemy()
 	{
 		int t = getTickCount();
+
 		if (t % 1000 < 5 && enemy_pool.size() < backGround.enemy_max)
 		{
 			srand(time(0));
@@ -42,7 +43,7 @@ private:
 				tx = backGround.screen_width / 2 + rand() % backGround.screen_width / 2 + backGround.heroSpriteSize.x * 2;
 
 
-			if (mainCharacter->x > backGround.screen_height / 2) 
+			if (mainCharacter->y > backGround.screen_height / 2) 
 				ty = rand() % backGround.screen_height / 2 - backGround.heroSpriteSize.y * 2;
 			else 
 				ty = backGround.screen_height / 2 + rand() % backGround.screen_height / 2 + backGround.heroSpriteSize.y * 2;
@@ -58,14 +59,10 @@ public:
 	virtual void PreInit(int& width, int& height, bool& fullscreen)
 	{
 		parse();
+
 		width						= backGround.screen_width;
 		height						= backGround.screen_height;
 		fullscreen					= false;
-
-		/*backGround.screen_width		= width;
-		backGround.screen_height	= height;
-		backGround.enemy_max		= 3;*/
-
 	}
 
 	virtual bool Init() 
@@ -148,8 +145,8 @@ public:
 
 		mainCharacter->reload();
 		mainCharacter->collisionWithEnemy	(enemy_pool, 
-										backGround.enemySpriteSize, 
-										backGround.heroSpriteSize);
+											backGround.enemySpriteSize, 
+											backGround.heroSpriteSize);
 
 		if (mainCharacter->dead) return true;
 
@@ -174,6 +171,7 @@ public:
 			{
 				if (mainCharacter->bulletPool.size() == mainCharacter->maxBullets) 
 					mainCharacter->bulletPool.erase(mainCharacter->bulletPool.begin());
+
 				mainCharacter->shoot(sight_pos.x, sight_pos.y);
 				break;
 			}
@@ -219,15 +217,21 @@ public:
 
 	std::vector<std::string> split(std::string str, char sym)
 	{
-		std::vector<std::string> params;
-		size_t cur, prev = 0;
-		cur = str.find(sym);
+		std::vector<std::string>	params;
+		size_t						cur;
+		size_t						prev;
+
+		cur		= str.find(sym);
+		prev	= 0;
+
 		while (cur <= str.size())
 		{
 			params.push_back(str.substr(prev, cur - prev));
-			prev = cur + 1;
-			cur = str.find(sym, prev);
+
+			prev	= cur + 1;
+			cur		= str.find(sym, prev);
 		}
+
 		params.push_back(str.substr(prev, cur - prev));
 
 		return params;
@@ -239,16 +243,19 @@ public:
 		try
 		{
 			std::vector<std::string> s = split(value, 'x');
+
 			for (auto number : s)
 				params.push_back(std::stoi(number));
 
-			if (params.size() == 1) {
-				first = params.at(0);
-				second = params.at(0);
+			if (params.size() == 1) 
+			{
+				first	= params.at(0);
+				second	= params.at(0);
 			}
-			if (params.size() == 2) {
-				first = params.at(0);
-				second = params.at(1);
+			if (params.size() == 2) 
+			{
+				first	= params.at(0);
+				second	= params.at(1);
 			}
 		}
 		catch (std::invalid_argument)
@@ -259,8 +266,11 @@ public:
 
 	void parse()
 	{
-		std::cout << "init elements like \n" << "in format [command] [value] \n" << "like that:\n"
-			<< "-window 600x600 -enemy 20 -map 1000x1000 -ammo 2 \n" << "Enter all required, value by default dint exist" << std::endl;
+		std::cout	<< "init elements like \n" 
+					<< "in format [command] [value] \n" 
+					<< "like that:\n"
+					<< "-window 600x600 -enemy 20 -map 1000x1000 -ammo 2 \n" 
+					<< "Enter all required, value by default dint exist" << std::endl;
 
 		std::vector<std::string> words;
 
@@ -276,28 +286,36 @@ public:
 			{
 				if (words[i + 1] != "-")
 				{
-					setParams(words[i + 1], backGround.screen_width, backGround.screen_height);
+					setParams	(words[i + 1], 
+								backGround.screen_width, 
+								backGround.screen_height);
 				}
 			}
 			if (words[i] == "-enemy")
 			{
 				if (words[i + 1] != "-")
 				{
-					setParams(words[i + 1], backGround.enemy_max, backGround.enemy_max);
+					setParams	(words[i + 1], 
+								backGround.enemy_max, 
+								backGround.enemy_max);
 				}
 			}
 			if (words[i] == "-map")
 			{
 				if (words[i + 1] != "-")
 				{
-					setParams(words[i + 1], backGround.map_width, backGround.map_height);
+					setParams	(words[i + 1], 
+								backGround.map_width, 
+								backGround.map_height);
 				}
 			}
 			if (words[i] == "-ammo")
 			{
 				if (words[i + 1] != "-")
 				{
-					setParams(words[i + 1], backGround.max_bullets, backGround.max_bullets);
+					setParams	(words[i + 1], 
+								backGround.max_bullets, 
+								backGround.max_bullets);
 				}
 			}
 		}
