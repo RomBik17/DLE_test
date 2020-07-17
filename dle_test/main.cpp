@@ -2,11 +2,8 @@
 #include "Framework.h"
 #include "ActorComponent.h"
 #include <time.h>
-#include <random>
 #include <iostream>
 #include <string>
-#include <algorithm>
-#include <map>
 
 /* Test Framework realization */
 class MyFramework : public Framework {
@@ -140,13 +137,15 @@ public:
 		
 		SpawnEnemy();
 
+		int i = 0;
 		for (auto& enemy : enemy_pool)
 		{
 			drawSprite	(enemy_sprite, 
 						enemy.x - (backGround.enemySpriteSize.x / 2),
 						enemy.y - (backGround.enemySpriteSize.y / 2));
 
-			enemy.move(mainCharacter->x, mainCharacter->y);
+			enemy.move(enemy_pool, i, mainCharacter->x, mainCharacter->y, backGround);
+			i++;
 		}
 
 		for (auto& bullet : mainCharacter->bulletPool)

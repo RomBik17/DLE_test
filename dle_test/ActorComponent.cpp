@@ -8,7 +8,7 @@ Enemy::Enemy(int _x, int _y, float speedKoef)
 	speedKoeficient = speedKoef;
 }
 
-void Enemy::move(int playerX, int playerY)
+void Enemy::move(std::vector<Enemy> enemy_pool, int enemy_i, int playerX, int playerY, BackgroundInfo background)
 {
 	float deltaX = playerX - x;
 	float deltaY = playerY - y;
@@ -16,8 +16,25 @@ void Enemy::move(int playerX, int playerY)
 	float oddX = (deltaX) / sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 	float oddY = (deltaY) / sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 
-	x += oddX * speedKoeficient;
-	y += oddY * speedKoeficient;
+	oddX = oddX * speedKoeficient;
+	oddY = oddY * speedKoeficient;
+
+	bool can_move = true;
+	for (int i = 0; i < enemy_i; i++)
+	{
+		if	(abs(enemy_pool[i].x + oddX - enemy_pool[enemy_i].x) < background.enemySpriteSize.x 
+			&& abs(enemy_pool[i].y + oddY - enemy_pool[enemy_i].y) < background.enemySpriteSize.y)
+		{
+			can_move = false;
+			break;
+		}
+	}
+
+	if (can_move)
+	{
+		x += oddX;
+		y += oddY;
+	}
 }
 
 Bullet::Bullet(int _x, int _y, int directionX, int directionY)

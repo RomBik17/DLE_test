@@ -48,7 +48,7 @@ public:
 
 	Enemy(int _x, int _y, float speedKoef = 0.1);
 
-	void move(int playerX, int playerY);
+	void move(std::vector<Enemy> enemy_pool, int enemy_i, int playerX, int playerY, BackgroundInfo background);
 
 };
 
