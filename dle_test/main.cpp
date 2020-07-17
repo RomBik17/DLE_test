@@ -66,6 +66,125 @@ private:
 		}
 	}
 
+	std::vector<std::string> split(std::string str, char sym)
+	{
+		std::vector<std::string>	params;
+		size_t						cur;
+		size_t						prev;
+
+		cur = str.find(sym);
+		prev = 0;
+
+		while (cur <= str.size())
+		{
+			params.push_back(str.substr(prev, cur - prev));
+
+			prev = cur + 1;
+			cur = str.find(sym, prev);
+		}
+
+		params.push_back(str.substr(prev, cur - prev));
+
+		return params;
+	}
+
+	void setParams(std::string value, int& first, int& second)
+	{
+		std::vector<int> params;
+		try
+		{
+			std::vector<std::string> s = split(value, 'x');
+
+			for (auto number : s)
+				params.push_back(std::stoi(number));
+
+			if (params.size() == 1)
+			{
+				first = params.at(0);
+				second = params.at(0);
+			}
+			if (params.size() == 2)
+			{
+				first = params.at(0);
+				second = params.at(1);
+			}
+		}
+		catch (std::invalid_argument)
+		{
+			std::cout << "invalid_argument";
+		}
+	}
+
+	void parse()
+	{
+		std::cout << "init elements like \n"
+			<< "in format [command] [value] \n"
+			<< "like that:\n"
+			<< "-window 600x600 -enemy 20 -map 1000x1000 -ammo 2 \n"
+			<< "Enter all required, value by default dint exist" << std::endl;
+
+		std::vector<std::string> words;
+
+		for (int i = 0; i < 8; i++)
+		{
+			std::string str;
+			std::cin >> str;
+			words.push_back(str);
+		}
+		for (int i = 0; i < 8; i++)
+		{
+			if (words[i] == "-window")
+			{
+				if (words[i + 1] != "-")
+				{
+					setParams(words[i + 1],
+						backGround.screen_width,
+						backGround.screen_height);
+				}
+			}
+			if (words[i] == "-enemy")
+			{
+				if (words[i + 1] != "-")
+				{
+					setParams(words[i + 1],
+						backGround.enemy_max,
+						backGround.enemy_max);
+				}
+			}
+			if (words[i] == "-map")
+			{
+				if (words[i + 1] != "-")
+				{
+					setParams(words[i + 1],
+						backGround.map_width,
+						backGround.map_height);
+				}
+			}
+			if (words[i] == "-ammo")
+			{
+				if (words[i + 1] != "-")
+				{
+					setParams(words[i + 1],
+						backGround.max_bullets,
+						backGround.max_bullets);
+				}
+			}
+		}
+	}
+
+	void restart()
+	{
+		delete mainCharacter;
+
+		enemy_pool.clear();
+
+		mainCharacter = new Player	(backGround.screen_width / 2,
+									backGround.screen_height / 2,
+									backGround.map_width / 2,
+									backGround.map_height / 2,
+									backGround.max_bullets);
+	}
+
 public:
 
 	virtual void PreInit(int& width, int& height, bool& fullscreen)
@@ -165,7 +284,7 @@ public:
 											backGround.enemySpriteSize, 
 											backGround.heroSpriteSize);
 
-		if (mainCharacter->dead) return true;
+		if (mainCharacter->dead) restart();
 
 		showCursor(false);
 
@@ -232,111 +351,6 @@ public:
 
 	virtual void onKeyReleased(FRKey k) {}
 
-	std::vector<std::string> split(std::string str, char sym)
-	{
-		std::vector<std::string>	params;
-		size_t						cur;
-		size_t						prev;
-
-		cur		= str.find(sym);
-		prev	= 0;
-
-		while (cur <= str.size())
-		{
-			params.push_back(str.substr(prev, cur - prev));
-
-			prev	= cur + 1;
-			cur		= str.find(sym, prev);
-		}
-
-		params.push_back(str.substr(prev, cur - prev));
-
-		return params;
-	}
-
-	void setParams(std::string value, int& first, int& second)
-	{
-		std::vector<int> params;
-		try
-		{
-			std::vector<std::string> s = split(value, 'x');
-
-			for (auto number : s)
-				params.push_back(std::stoi(number));
-
-			if (params.size() == 1) 
-			{
-				first	= params.at(0);
-				second	= params.at(0);
-			}
-			if (params.size() == 2) 
-			{
-				first	= params.at(0);
-				second	= params.at(1);
-			}
-		}
-		catch (std::invalid_argument)
-		{
-			std::cout << "invalid_argument";
-		}
-	}
-
-	void parse()
-	{
-		std::cout	<< "init elements like \n" 
-					<< "in format [command] [value] \n" 
-					<< "like that:\n"
-					<< "-window 600x600 -enemy 20 -map 1000x1000 -ammo 2 \n" 
-					<< "Enter all required, value by default dint exist" << std::endl;
-
-		std::vector<std::string> words;
-
-		for(int i = 0; i<8; i++)
-		{
-			std::string str;
-			std::cin >> str;
-			words.push_back(str);
-		}
-		for (int i = 0; i < 8; i++)
-		{
-			if (words[i] == "-window")
-			{
-				if (words[i + 1] != "-")
-				{
-					setParams	(words[i + 1], 
-								backGround.screen_width, 
-								backGround.screen_height);
-				}
-			}
-			if (words[i] == "-enemy")
-			{
-				if (words[i + 1] != "-")
-				{
-					setParams	(words[i + 1], 
-								backGround.enemy_max, 
-								backGround.enemy_max);
-				}
-			}
-			if (words[i] == "-map")
-			{
-				if (words[i + 1] != "-")
-				{
-					setParams	(words[i + 1], 
-								backGround.map_width, 
-								backGround.map_height);
-				}
-			}
-			if (words[i] == "-ammo")
-			{
-				if (words[i + 1] != "-")
-				{
-					setParams	(words[i + 1], 
-								backGround.max_bullets, 
-								backGround.max_bullets);
-				}
-			}
-		}
-	}
 };
 
 int main(int argc, char* argv[])
