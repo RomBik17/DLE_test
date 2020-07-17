@@ -36,17 +36,33 @@ private:
 			int tx;
 			int ty;
 			
-			if ( mainCharacter->x > backGround.screen_width / 2) 
-				tx = rand() % backGround.screen_width / 2 - backGround.heroSpriteSize.x *2;
-			else 
-				tx = backGround.screen_width / 2 + rand() % backGround.screen_width / 2 + backGround.heroSpriteSize.x * 2;
+			if (mainCharacter->x == backGround.screen_width / 2 && mainCharacter->y == backGround.screen_height / 2)
+			{
+				int k, t;
+				srand(time(0));
+				tx	= rand() % 200 + 200;
+				ty	= rand() % 200 + 200;
+				k	= rand() % 2 - 1;
+				t	= rand() % 2 - 1;
+
+				if (k < 0) tx = mainCharacter->x - tx;
+				else tx = mainCharacter->x + tx;
+				if (t < 0) ty = mainCharacter->y - ty;
+				else ty = mainCharacter->y + ty;
+			}
+			else
+			{
+				if (mainCharacter->x > backGround.screen_width / 2)
+					tx = rand() % backGround.screen_width / 2 - backGround.heroSpriteSize.x * 2;
+				else
+					tx = backGround.screen_width / 2 + rand() % backGround.screen_width / 2 + backGround.heroSpriteSize.x * 2;
 
 
-			if (mainCharacter->y > backGround.screen_height / 2) 
-				ty = rand() % backGround.screen_height / 2 - backGround.heroSpriteSize.y * 2;
-			else 
-				ty = backGround.screen_height / 2 + rand() % backGround.screen_height / 2 + backGround.heroSpriteSize.y * 2;
-
+				if (mainCharacter->y > backGround.screen_height / 2)
+					ty = rand() % backGround.screen_height / 2 - backGround.heroSpriteSize.y * 2;
+				else
+					ty = backGround.screen_height / 2 + rand() % backGround.screen_height / 2 + backGround.heroSpriteSize.y * 2;
+			}
 
 			Enemy en(tx, ty);
 			enemy_pool.push_back(en);
