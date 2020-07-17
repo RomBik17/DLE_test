@@ -13,8 +13,7 @@ class MyFramework : public Framework {
 
 private:
 
-	float					ATime = 0;
-
+	Sprite*					background_sprite;
 	Sprite*					hero_sprite;
 	Sprite*					enemy_sprite;
 	Sprite*					sight_sprite;
@@ -31,7 +30,7 @@ private:
 	{
 		int t = getTickCount();
 
-		if (t % 1000 < 5 && enemy_pool.size() < backGround.enemy_max)
+		if (t % 1000 < 2 && enemy_pool.size() < backGround.enemy_max)
 		{
 			srand(time(0));
 			int tx;
@@ -60,21 +59,24 @@ public:
 	{
 		parse();
 
-		width						= backGround.screen_width;
-		height						= backGround.screen_height;
-		fullscreen					= false;
+		width			= backGround.screen_width;
+		height			= backGround.screen_height;
+		fullscreen		= false;
 	}
 
 	virtual bool Init() 
 	{
-		hero_sprite		= createSprite("data\\avatar.jpg");
-		enemy_sprite	= createSprite("data\\enemy.png");
-		sight_sprite	= createSprite("data\\aim_icon.png");
-		bullet_sprite	= createSprite("data\\bullet.png");
+		background_sprite	= createSprite("data\\background.jpg");
+		hero_sprite			= createSprite("data\\avatar.jpg");
+		enemy_sprite		= createSprite("data\\enemy.png");
+		sight_sprite		= createSprite("data\\aim_icon.png");
+		bullet_sprite		= createSprite("data\\bullet.png");
 
-		mainCharacter		= new Player(backGround.screen_width / 2, 
-										backGround.screen_height / 2, 
-										backGround.max_bullets);
+		mainCharacter	= new Player(backGround.screen_width / 2, 
+									backGround.screen_height / 2,
+									backGround.map_width / 2,
+									backGround.map_height / 2,
+									backGround.max_bullets);
 
 		getSpriteSize	(hero_sprite, 
 						backGround.heroSpriteSize.x, 
@@ -107,10 +109,10 @@ public:
 
 	virtual bool Tick() 
 	{
-		float DeltaTime = getTickCount() - ATime;
-		ATime			= getTickCount();
 
-		drawTestBackground();
+		drawSprite	(background_sprite, 
+					mainCharacter->x - mainCharacter->relativeX, 
+					mainCharacter->y - mainCharacter->relativeY);
 
 		drawSprite	(hero_sprite, 
 					mainCharacter->x - (backGround.heroSpriteSize.x / 2),
@@ -188,24 +190,24 @@ public:
 		{
 			int w, h;
 			getScreenSize(w, h);
-			if (mainCharacter->x <= w - 30) mainCharacter->move(RIGHT);
+			if (mainCharacter->x <= w - 30) mainCharacter->move(RIGHT, enemy_pool);
 			break;
 		}
 		case FRKey::LEFT:
 		{
-			if (mainCharacter->x >= 30) mainCharacter->move(LEFT);
+			if (mainCharacter->x >= 30) mainCharacter->move(LEFT, enemy_pool);
 			break; 
 		}
 		case FRKey::DOWN:
 		{
 			int w, h;
 			getScreenSize(w, h);
-			if (mainCharacter->y <= h - 30) mainCharacter->move(DOWN);
+			if (mainCharacter->y <= h - 30) mainCharacter->move(DOWN, enemy_pool);
 			break;
 		}
 		case FRKey::UP:
 		{
-			if (mainCharacter->y >= 30) mainCharacter->move(UP);
+			if (mainCharacter->y >= 30) mainCharacter->move(UP, enemy_pool);
 			break;
 		}
 		default:

@@ -31,6 +31,8 @@ public:
 
 	float x;
 	float y;
+	float relativeX;
+	float relativeY;
 
 	virtual ~ActorComponent() {}
 
@@ -44,7 +46,7 @@ private:
 
 public:
 
-	Enemy(int _x, int _y, float speedKoef = 0.5);
+	Enemy(int _x, int _y, float speedKoef = 0.1);
 
 	void move(int playerX, int playerY);
 
@@ -79,9 +81,9 @@ public:
 
 	std::vector<Bullet> bulletPool;
 
-	Player(int _x, int _y, int bulletCount);
+	Player(int _x, int _y, int relX, int relY, int bulletCount);
 
-	void move(Direction direction);
+	void move(Direction direction, std::vector<Enemy>& enemy_pool);
 	void shoot(int directionX, int directionY);
 	void reload();
 	void collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition heroSpriteSize);

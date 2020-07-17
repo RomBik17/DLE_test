@@ -67,42 +67,61 @@ void Bullet::collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition en
 	}
 }
 
-Player::Player(int _x, int _y, int bulletCount)
+Player::Player(int _x, int _y, int relX, int relY, int bulletCount)
 {
-	dead = false;
+	dead		= false;
 
-	x = _x;
-	y = _y;
+	x			= _x;
+	y			= _y;
+	relativeX	= relX;
+	relativeY	= relY;
 
-	maxBullets = bulletCount;
+	maxBullets	= bulletCount;
 }
 
-void Player::move(Direction direction)
+void Player::move(Direction direction, std::vector<Enemy>& enemy_pool)
 {
+	ActorPosition delta = { 0, 0 };
+
 	switch (direction)
 	{
 	case Direction::LEFT:
 	{
-		x -= 10;
+		delta = { -10, 0 };
 		break;
 	}
 	case Direction::RIGHT:
 	{
-		x += 10;
+		delta = { 10, 0 };
 		break;
 	}
 	case Direction::UP:
 	{
-		y -= 10;
+		delta = { 0, -10 };
 		break;
 	}
 	case Direction::DOWN:
 	{
-		y += 10;
+		delta = { 0, 10 };
 		break;
 	}
 	default:
 		break;
+	}
+
+	relativeX += delta.x;
+	relativeY += delta.y;
+
+	for (auto& enemy : enemy_pool)
+	{
+		enemy.x -= delta.x;
+		enemy.y -= delta.y;
+	}
+
+	for (auto& bullet : bulletPool)
+	{
+		bullet.x -= delta.x;
+		bullet.y -= delta.y;
 	}
 }
 
