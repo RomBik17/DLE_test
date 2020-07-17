@@ -13,6 +13,7 @@ void Enemy::move(std::vector<Enemy> enemy_pool, int enemy_i, int playerX, int pl
 	float deltaX = playerX - x;
 	float deltaY = playerY - y;
 
+	//calculate a single vector
 	float oddX = (deltaX) / sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 	float oddY = (deltaY) / sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 
@@ -20,6 +21,7 @@ void Enemy::move(std::vector<Enemy> enemy_pool, int enemy_i, int playerX, int pl
 	oddY = oddY * speedKoeficient;
 
 	bool can_move = true;
+
 	//check if on this coordinates is other enemy, if it is, enemy can't move
 	for (int i = 0; i < enemy_i; i++)
 	{
