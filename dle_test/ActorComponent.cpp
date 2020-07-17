@@ -20,6 +20,7 @@ void Enemy::move(std::vector<Enemy> enemy_pool, int enemy_i, int playerX, int pl
 	oddY = oddY * speedKoeficient;
 
 	bool can_move = true;
+	//check if on this coordinates is other enemy, if it is, enemy can't move
 	for (int i = 0; i < enemy_i; i++)
 	{
 		if	(abs(enemy_pool[i].x + oddX - enemy_pool[enemy_i].x) < background.enemySpriteSize.x 
@@ -57,23 +58,23 @@ void Bullet::move()
 	y += dy;
 }
 
-void Bullet::collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition bulletSpriteSize)
+void Bullet::collisionWithEnemy(std::vector<Enemy>& enemy_pool, BackgroundInfo background)
 {
 	int i = 0;
 	for (auto enemy : enemy_pool)
 	{
-		if (abs(x - enemy.x) < ((enemySpriteSize.x + bulletSpriteSize.x) / 2))
+		if (abs(x - enemy.x) < ((background.enemySpriteSize.x + background.bulletSpriteSize.x) / 2))
 		{
-			if (abs(y - enemy.y) < ((enemySpriteSize.y + bulletSpriteSize.y) / 2))
+			if (abs(y - enemy.y) < ((background.enemySpriteSize.y + background.bulletSpriteSize.y) / 2))
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
 				penetration = true;
 				return;
 			}
 		}
-		else if (abs(y - enemy.y) < ((enemySpriteSize.y + bulletSpriteSize.y) / 2))
+		else if (abs(y - enemy.y) < ((background.enemySpriteSize.y + background.bulletSpriteSize.y) / 2))
 		{
-			if (abs(x - enemy.x) < ((enemySpriteSize.x + bulletSpriteSize.x) / 2))
+			if (abs(x - enemy.x) < ((background.enemySpriteSize.x + background.bulletSpriteSize.x) / 2))
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
 				penetration = true;
@@ -107,6 +108,8 @@ void Player::move(Direction direction, std::vector<Enemy>& enemy_pool, Backgroun
 	case Direction::LEFT:
 	{
 		delta = { -10, 0 };
+
+		//if player is on the end of map
 		if (x != background.screen_width / 2)
 		{
 			x -= 10;
@@ -122,6 +125,8 @@ void Player::move(Direction direction, std::vector<Enemy>& enemy_pool, Backgroun
 	case Direction::RIGHT:
 	{
 		delta = { 10, 0 };
+
+		//if player is on the end of map
 		if (x != background.screen_width / 2)
 		{
 			x += 10;
@@ -137,6 +142,8 @@ void Player::move(Direction direction, std::vector<Enemy>& enemy_pool, Backgroun
 	case Direction::UP:
 	{
 		delta = { 0, -10 };
+
+		//if player is on the end of map
 		if (y != background.screen_height / 2)
 		{
 			y -= 10;
@@ -152,6 +159,8 @@ void Player::move(Direction direction, std::vector<Enemy>& enemy_pool, Backgroun
 	case Direction::DOWN:
 	{
 		delta = { 0, 10 };
+
+		//if player is on the end of map
 		if (y != background.screen_height / 2)
 		{
 			y += 10;
@@ -171,6 +180,8 @@ void Player::move(Direction direction, std::vector<Enemy>& enemy_pool, Backgroun
 	relativeX += delta.x;
 	relativeY += delta.y;
 
+	//if player is on the end of map, then player can walk to the end and map won't be recenterd,
+	//so we won't need to change coordinates of other components
 	if (mustChangeComponents)
 	{
 		for (auto& enemy : enemy_pool)
@@ -199,28 +210,29 @@ void Player::reload()
 	int i = 0;
 	for (auto bullet : bulletPool)
 	{
+		//if bullet is colliding with enemy, then destroy bullet
 		if (bullet.penetration) bulletPool.erase(bulletPool.begin() + i);
 		i++;
 	}
 }
 
-void Player::collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition heroSpriteSize)
+void Player::collisionWithEnemy(std::vector<Enemy>& enemy_pool, BackgroundInfo background)
 {
 	int i = 0;
 	for (auto enemy : enemy_pool)
 	{
-		if (abs(x - enemy.x) < ((enemySpriteSize.x + heroSpriteSize.x) / 2))
+		if (abs(x - enemy.x) < ((background.enemySpriteSize.x + background.heroSpriteSize.x) / 2))
 		{
-			if (abs(y - enemy.y) < ((enemySpriteSize.y + heroSpriteSize.y) / 2))
+			if (abs(y - enemy.y) < ((background.enemySpriteSize.y + background.heroSpriteSize.y) / 2))
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
 				dead = true;
 				return;
 			}
 		}
-		else if (abs(y - enemy.y) < ((enemySpriteSize.y + heroSpriteSize.y) / 2))
+		else if (abs(y - enemy.y) < ((background.enemySpriteSize.y + background.heroSpriteSize.y) / 2))
 		{
-			if (abs(x - enemy.x) < ((enemySpriteSize.x + heroSpriteSize.x) / 2))
+			if (abs(x - enemy.x) < ((background.enemySpriteSize.x + background.heroSpriteSize.x) / 2))
 			{
 				enemy_pool.erase(enemy_pool.begin() + i);
 				dead = true;
@@ -229,5 +241,4 @@ void Player::collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition en
 		}
 		i++;
 	}
-	return;
 }

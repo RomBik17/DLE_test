@@ -275,15 +275,11 @@ public:
 						bullet.y - (backGround.bulletSpriteSize.y / 2));
 
 			bullet.move();
-			bullet.collisionWithEnemy	(enemy_pool, 
-										backGround.enemySpriteSize, 
-										backGround.bulletSpriteSize);
+			bullet.collisionWithEnemy(enemy_pool, backGround);
 		}
 
 		mainCharacter->reload();
-		mainCharacter->collisionWithEnemy	(enemy_pool, 
-											backGround.enemySpriteSize, 
-											backGround.heroSpriteSize);
+		mainCharacter->collisionWithEnemy(enemy_pool, backGround);
 
 		if (mainCharacter->dead) restart();
 

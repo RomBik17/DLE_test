@@ -29,8 +29,10 @@ class ActorComponent
 {
 public:
 
+	//coordinates on screen
 	float x;
 	float y;
+	//relative coordinates are coordinates on map
 	float relativeX;
 	float relativeY;
 
@@ -46,6 +48,7 @@ private:
 
 public:
 
+	//speed koef is responsible for speed
 	Enemy(int _x, int _y, float speedKoef = 0.1);
 
 	void move(std::vector<Enemy> enemy_pool, int enemy_i, int playerX, int playerY, BackgroundInfo background);
@@ -61,12 +64,13 @@ private:
 
 public:
 
+	//flag for collision with enemy
 	bool penetration;
 
 	Bullet(int _x, int _y, int directionX, int directionY);
 
 	void move();
-	void collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition bulletSpriteSize);
+	void collisionWithEnemy(std::vector<Enemy>& enemy_pool, BackgroundInfo background);
 
 };
 
@@ -77,6 +81,7 @@ public:
 
 	int					maxBullets;
 
+	//flag for collision with enemy
 	bool				dead;
 
 	std::vector<Bullet> bulletPool;
@@ -86,6 +91,6 @@ public:
 	void move(Direction direction, std::vector<Enemy>& enemy_pool, BackgroundInfo background);
 	void shoot(int directionX, int directionY);
 	void reload();
-	void collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition heroSpriteSize);
+	void collisionWithEnemy(std::vector<Enemy>& enemy_pool, BackgroundInfo background);
 
 };
