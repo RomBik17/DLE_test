@@ -91,6 +91,7 @@ private:
 	void setParams(std::string value, int& first, int& second)
 	{
 		std::vector<int> params;
+
 		try
 		{
 			std::vector<std::string> s = split(value, 'x');
@@ -100,13 +101,13 @@ private:
 
 			if (params.size() == 1)
 			{
-				first = params.at(0);
-				second = params.at(0);
+				first	= params.at(0);
+				second	= params.at(0);
 			}
 			if (params.size() == 2)
 			{
-				first = params.at(0);
-				second = params.at(1);
+				first	= params.at(0);
+				second	= params.at(1);
 			}
 		}
 		catch (std::invalid_argument)
@@ -137,36 +138,36 @@ private:
 			{
 				if (words[i + 1] != "-")
 				{
-					setParams(words[i + 1],
-						backGround.screen_width,
-						backGround.screen_height);
+					setParams	(words[i + 1],
+								backGround.screen_width,
+								backGround.screen_height);
 				}
 			}
 			if (words[i] == "-enemy")
 			{
 				if (words[i + 1] != "-")
 				{
-					setParams(words[i + 1],
-						backGround.enemy_max,
-						backGround.enemy_max);
+					setParams	(words[i + 1],
+								backGround.enemy_max,
+								backGround.enemy_max);
 				}
 			}
 			if (words[i] == "-map")
 			{
 				if (words[i + 1] != "-")
 				{
-					setParams(words[i + 1],
-						backGround.map_width,
-						backGround.map_height);
+					setParams	(words[i + 1],
+								backGround.map_width,
+								backGround.map_height);
 				}
 			}
 			if (words[i] == "-ammo")
 			{
 				if (words[i + 1] != "-")
 				{
-					setParams(words[i + 1],
-						backGround.max_bullets,
-						backGround.max_bullets);
+					setParams	(words[i + 1],
+								backGround.max_bullets,
+								backGround.max_bullets);
 				}
 			}
 		}
