@@ -190,24 +190,24 @@ public:
 		{
 			int w, h;
 			getScreenSize(w, h);
-			if (mainCharacter->x <= w - 30) mainCharacter->move(RIGHT, enemy_pool);
+			if (mainCharacter->x <= w - 30) mainCharacter->move(RIGHT, enemy_pool, backGround);
 			break;
 		}
 		case FRKey::LEFT:
 		{
-			if (mainCharacter->x >= 30) mainCharacter->move(LEFT, enemy_pool);
+			if (mainCharacter->x >= 30) mainCharacter->move(LEFT, enemy_pool, backGround);
 			break; 
 		}
 		case FRKey::DOWN:
 		{
 			int w, h;
 			getScreenSize(w, h);
-			if (mainCharacter->y <= h - 30) mainCharacter->move(DOWN, enemy_pool);
+			if (mainCharacter->y <= h - 30) mainCharacter->move(DOWN, enemy_pool, backGround);
 			break;
 		}
 		case FRKey::UP:
 		{
-			if (mainCharacter->y >= 30) mainCharacter->move(UP, enemy_pool);
+			if (mainCharacter->y >= 30) mainCharacter->move(UP, enemy_pool, backGround);
 			break;
 		}
 		default:

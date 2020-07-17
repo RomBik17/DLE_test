@@ -83,7 +83,7 @@ public:
 
 	Player(int _x, int _y, int relX, int relY, int bulletCount);
 
-	void move(Direction direction, std::vector<Enemy>& enemy_pool);
+	void move(Direction direction, std::vector<Enemy>& enemy_pool, BackgroundInfo background);
 	void shoot(int directionX, int directionY);
 	void reload();
 	void collisionWithEnemy(std::vector<Enemy>& enemy_pool, ActorPosition enemySpriteSize, ActorPosition heroSpriteSize);

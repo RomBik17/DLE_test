@@ -79,30 +79,72 @@ Player::Player(int _x, int _y, int relX, int relY, int bulletCount)
 	maxBullets	= bulletCount;
 }
 
-void Player::move(Direction direction, std::vector<Enemy>& enemy_pool)
+void Player::move(Direction direction, std::vector<Enemy>& enemy_pool, BackgroundInfo background)
 {
-	ActorPosition delta = { 0, 0 };
+	ActorPosition	delta					= { 0, 0 };
+
+	bool			mustChangeComponents	= true;
 
 	switch (direction)
 	{
 	case Direction::LEFT:
 	{
 		delta = { -10, 0 };
+		if (x != background.screen_width / 2)
+		{
+			x -= 10;
+			mustChangeComponents = false;
+		}
+		else if (relativeX - (background.screen_width / 2) - 10 < 0)
+		{
+			x -= 10;
+			mustChangeComponents = false;
+		}
 		break;
 	}
 	case Direction::RIGHT:
 	{
 		delta = { 10, 0 };
+		if (x != background.screen_width / 2)
+		{
+			x += 10;
+			mustChangeComponents = false;
+		}
+		else if (relativeX + (background.screen_width / 2) + 10 > background.map_width)
+		{
+			x += 10;
+			mustChangeComponents = false;
+		}
 		break;
 	}
 	case Direction::UP:
 	{
 		delta = { 0, -10 };
+		if (y != background.screen_height / 2)
+		{
+			y -= 10;
+			mustChangeComponents = false;
+		}
+		else if (relativeY - (background.screen_height / 2) - 10 < 0) 
+		{ 
+			y -= 10; 
+			mustChangeComponents = false;
+		}
 		break;
 	}
 	case Direction::DOWN:
 	{
 		delta = { 0, 10 };
+		if (y != background.screen_height / 2)
+		{
+			y += 10;
+			mustChangeComponents = false;
+		}
+		else if (relativeY + (background.screen_height / 2) + 10 > background.map_height)
+		{
+			y += 10;
+			mustChangeComponents = false;
+		}
 		break;
 	}
 	default:
@@ -112,17 +154,21 @@ void Player::move(Direction direction, std::vector<Enemy>& enemy_pool)
 	relativeX += delta.x;
 	relativeY += delta.y;
 
-	for (auto& enemy : enemy_pool)
+	if (mustChangeComponents)
 	{
-		enemy.x -= delta.x;
-		enemy.y -= delta.y;
+		for (auto& enemy : enemy_pool)
+		{
+			enemy.x -= delta.x;
+			enemy.y -= delta.y;
+		}
+
+		for (auto& bullet : bulletPool)
+		{
+			bullet.x -= delta.x;
+			bullet.y -= delta.y;
+		}
 	}
 
-	for (auto& bullet : bulletPool)
-	{
-		bullet.x -= delta.x;
-		bullet.y -= delta.y;
-	}
 }
 
 void Player::shoot(int directionX, int directionY)
@@ -137,6 +183,7 @@ void Player::reload()
 	for (auto bullet : bulletPool)
 	{
 		if (bullet.penetration) bulletPool.erase(bulletPool.begin() + i);
+		i++;
 	}
 }
 
